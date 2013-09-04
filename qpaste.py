@@ -11,15 +11,8 @@ class Popup(tkinter.Frame):
         self.show_yourself()
        
     def show_yourself(self):
-        self.hi_there = tkinter.Button(self)
-        self.hi_there["text"] = "Hello World\n(click me)"
-        self.hi_there["command"] = self.say_hi
-        self.hi_there.pack(side="top")
+        pass
 
-        self.QUIT = tkinter.Button(self, text="QUIT", fg="red",
-                              command=root.destroy)
-        self.QUIT.pack(side="bottom")
- 
     @staticmethod
     def refresh_data(self):
         current_index = 0
@@ -48,6 +41,19 @@ def main():
             "Running this on any other Operating System wont really work")
     stdscr = tkinter.Tk()
     stdscr.title("qpaste")
+    testlabel = tkinter.Label(stdscr, text="Do some keypressing", width=30)
+    testlabel.pack()
+
+    def checkkey(event):
+        if event.char == event.keysym:
+            msg = 'Normal Key %r' % event.char
+        elif len(event.char) == 1:
+            msg = 'Punctuation Key %r (%r)' % (event.keysym, event.char)
+        else:
+            msg = 'Special Key %r' % event.keysym
+        testlabel.config(text=msg)
+    stdscr.bind_all("<Key>", checkkey)
+        
     pop = Popup(master=stdscr)
     #win.withdraw()
     pop.mainloop()
