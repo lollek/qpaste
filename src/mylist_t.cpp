@@ -28,6 +28,7 @@ void mylist::add_new(mylist_t *root, int index) {
     ptr = ptr->next;
   ptr->next = new mylist_t;
   ptr->next->num = index;
+  ptr->next->next = NULL;
 }
 
 void mylist::add_data(mylist_t *root, int index, const char* data) {
