@@ -19,22 +19,20 @@ def update_all():
                 
 def add_to_clipboard(string_to_add):
     assert type(string_to_add) is str
-    os.system("echo {}|clip".format(string_to_add));
+    os.system("echo {} | clip".format(string_to_add.strip()))
 
 def main():
     if os.name != "nt":
         return complain(
-            "Your OS is not recognized as Windows.\n" + 
+            "Your OS is not recognized as Windows.\n" +
             "Running this on any other Operating System wont really work")
 
     lst = update_all()
     num = input("Type number 1-{} to add it to clipboard: ".format(len(lst)))
-    if 1 <= num <= len(lst):
-        print(lst[num-1])
+    if num.isdigit() and 1 <= int(num) <= len(lst):
+    add_to_clipboard(lst[int(num)-1])
     
         
 
 if __name__ == "__main__":
     main()
-
-    
