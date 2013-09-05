@@ -6,7 +6,7 @@ import tkinter
 class Popup(tkinter.Listbox):
 
     def __init__(self, master=None):
-        tkinter.Frame.__init__(self, master)
+        tkinter.Listbox.__init__(self, master)
         master.title("qpaste")
         for num, text in enumerate(self.refresh_data()):
             self.insert(num+1, text)
@@ -26,8 +26,8 @@ class Popup(tkinter.Listbox):
         return returnl
 
     @staticmethod
-    def add_to_clipboard(self, string_to_add):
-        assert type(string_to_add) is str
+    def add_to_clipboard(string_to_add):
+        #assert type(string_to_add) is str
         os.system("echo {} | clip".format(string_to_add.strip()))
 
 def main():
