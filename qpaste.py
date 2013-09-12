@@ -2,6 +2,7 @@
 
 import os
 import tkinter
+import pyperclip
 
 class Popup(tkinter.Listbox):
 
@@ -29,10 +30,9 @@ class Popup(tkinter.Listbox):
                         self.data[current_index-1] += line
         return self.data
 
-    @staticmethod
-    def add_to_clipboard(string_to_add):
-        #assert type(string_to_add) is str
-        os.system("echo {} | clip".format(string_to_add.strip()))
+    #@staticmethod
+    def add_to_clipboard(self, string_to_add):
+        pyperclip.copy(string_to_add.encode("iso-8859-1"))
 
 def main():
     if os.name != "nt":
