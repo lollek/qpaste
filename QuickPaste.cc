@@ -89,7 +89,7 @@ int QuickPaste::pasteText(int num, bool reload) {
 }
 
 int setCopyText(int num) {
-  if (hash.find(num) == map::end) {
+  if (hash.find(num) == map<int, string>::end) {
     return 1;
   }
   size_t size = hash[num].size();
