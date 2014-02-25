@@ -88,7 +88,7 @@ int QuickPaste::pasteText(int num, bool reload) {
   return 0;
 }
 
-int setCopyText(int num) {
+int QuickPaste::setCopyText(int num) {
   if (hash.find(num) == map<int, string>::end) {
     return 1;
   }
