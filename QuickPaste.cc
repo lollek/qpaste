@@ -6,6 +6,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <winuser.h>
+#include <winable.h>
 #endif
 
 #include "QuickPaste.hh"
@@ -55,7 +56,7 @@ int QuickPaste::pasteText(int num, bool reload) {
     return 1;
   }
 
-  INPUT KeysToSend[2];
+  INPUT KeyToSend[2];
 
   /* Control Key */
   KeyToSend[0].type = INPUT_KEYBOARD;
