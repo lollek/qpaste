@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -33,7 +36,7 @@ namespace QPaste
         {
             if (!HooksAreLoaded)
             {
-                KeyboardHook.FunPaste = () => Console.WriteLine("Yelow");
+                KeyboardHook.FunPaste = Appear;
                 KeyboardHook.Activate();
 
                 ClipboardHook.OnNewData = Add;
@@ -56,7 +59,24 @@ namespace QPaste
         {
             int i = StringContainer.Add(s);
             if (i != -1)
-                listView.Items.Add(new { Id = i, Name = s });
+                listView.Items.Insert(0, new { Id = i, Data = s });
+        }
+
+        public void Appear()
+        {
+            WindowState = WindowState.Normal;
+            Activate();
+        }
+
+        private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (listView.SelectedIndex == -1)
+                return;
+
+            ClipboardHook.SetClipboardData(StringContainer.Get(listView.SelectedIndex));
+            WindowState = WindowState.Minimized;
+            //Thread.Sleep(1000);
+            KeyboardHook.SendPaste();
         }
     }
 }

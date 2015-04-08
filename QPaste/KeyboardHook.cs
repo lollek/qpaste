@@ -11,8 +11,6 @@ namespace QPaste
 {
     class KeyboardHook
     {
-        private const int WH_KEYBOARD_LL = 13;
-        private const int WM_KEYDOWN = 0x0100;
         private static IntPtr HookID = IntPtr.Zero;
         private static LowLevelKeyboardProc HookProcessPtr = HookCallback;
         public static Action FunPaste;
@@ -33,13 +31,14 @@ namespace QPaste
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
         public static void Activate()
         {
             using (ProcessModule curModule = Process.GetCurrentProcess().MainModule)
             {
+                const int WH_KEYBOARD_LL = 13;
                 HookID = SetWindowsHookEx(WH_KEYBOARD_LL, HookProcessPtr, GetModuleHandle(curModule.ModuleName), 0);
             }
         }
@@ -53,10 +52,25 @@ namespace QPaste
             HookID = IntPtr.Zero;
         }
 
+        public static void SendPaste()
+        {
+            const int KEYEVENTF_EXTENDEDKEY = 0x0001;
+            const int KEYEVENTF_KEYUP = 0x0002;
+            const int VK_LCONTROL = 0xA2;
+            const int V = 0x56;
+
+            // Hold Control down and press C
+            keybd_event(VK_LCONTROL, 0, KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
+            keybd_event(V, 0, KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
+            keybd_event(V, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+            keybd_event(VK_LCONTROL, 0, KEYEVENTF_KEYUP, UIntPtr.Zero);
+        }
+
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
+            const int WM_KEYDOWN = 0x0100;
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN && Control.ModifierKeys == (Keys.Control | Keys.Alt))
-            {
+            {    
                 Action action = null;
                 switch((Keys)Marshal.ReadInt32(lParam))
                 {

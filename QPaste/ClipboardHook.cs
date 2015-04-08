@@ -43,6 +43,11 @@ namespace QPaste
             ChangeClipboardChain(HwndSource.Handle, NextEvent);
         }
 
+        public static void SetClipboardData(String s)
+        {
+            Clipboard.SetText(s, TextDataFormat.Text);
+        }
+
         private static IntPtr MainWindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             switch (msg)

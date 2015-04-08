@@ -31,5 +31,10 @@ namespace QPaste
 
             return StorageListSize++;
         }
+
+        public String Get(int i)
+        {
+            return (0 <= i && i < StorageListSize) ? StorageList.ElementAt(i) : "";
+        }
     }
 }
