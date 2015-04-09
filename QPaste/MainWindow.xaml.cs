@@ -36,7 +36,7 @@ namespace QPaste
         {
             if (!HooksAreLoaded)
             {
-                KeyboardHook.FunPaste = Appear;
+                KeyboardHook.FunPaste = ShowWindow;
                 KeyboardHook.Activate();
 
                 ClipboardHook.OnNewData = Add;
@@ -59,24 +59,48 @@ namespace QPaste
         {
             int i = StringContainer.Add(s);
             if (i != -1)
-                listView.Items.Insert(0, new { Id = i, Data = s });
+                listView.Items.Insert(0, new ListViewItem(i + 1, s));
+            listView_ResetIds();
         }
 
-        public void Appear()
+        private void ShowWindow()
         {
             WindowState = WindowState.Normal;
             Activate();
         }
 
-        private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void HideWindow()
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void listView_ResetIds()
+        {
+            for (int i = 0; i < listView.Items.Count; i++)
+                ((ListViewItem)listView.Items[i]).Id = i + 1;
+            listView.Items.Refresh();
+        }
+
+        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (listView.SelectedIndex == -1)
                 return;
 
             ClipboardHook.SetClipboardData(StringContainer.Get(listView.SelectedIndex));
-            WindowState = WindowState.Minimized;
-            //Thread.Sleep(1000);
+            HideWindow();
             KeyboardHook.SendPaste();
+        }
+    }
+
+    class ListViewItem
+    {
+        public int Id { get; set; }
+        public String Data { get; set; }
+
+        public ListViewItem(int id, String data)
+        {
+            Id = id;
+            Data = data;
         }
     }
 }
