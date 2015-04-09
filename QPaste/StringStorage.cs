@@ -41,10 +41,10 @@ namespace QPaste
         /// Returns the ith string in the StringStorage
         /// </summary>
         /// <param name="i">Index to return</param>
-        /// <returns>The ith string, or an empty string if it does not exist</returns>
+        /// <returns>The ith string, or null if it does not exist</returns>
         public String Get(int i)
         {
-            return (0 <= i && i < StorageListSize) ? StorageList.ElementAt(i) : "";
+            return (0 <= i && i < StorageListSize) ? StorageList.ElementAt(i) : null;
         }
     }
 }
